@@ -24,40 +24,40 @@ let theme = computed(() => {
 })
 let currentPage = ref([])
 onMounted(()=>{
-  currentPage.value = [getCurrentPageFromLocalStorage()]
-  if(!currentPage.value) {
-    setCurrentPageToLocalStorage('home')
+  currentPage.value = [getCurrentPageFromSessionStorage()]
+  if(!currentPage.value[0]) {
+    setCurrentPageToSessionStorage('home')
   }
   Cache.currentPage = currentPage.value[0]
   console.log(currentPage.value[0], 'now')
-  let themeLocalStorage = getThemeFromLocalStorage()
+  let themeLocalStorage = getThemeFromSessionStorage()
   if(!themeLocalStorage) {
-    setThemeToLocalStorage(theme.value)
+    setThemeToSessionStorage(theme.value)
   } else {
     Cache.theme = themeLocalStorage
   }
   console.log('theme:', theme.value)
 })
 
-function getThemeFromLocalStorage() {
-  return window.localStorage.getItem('theme')
+function getThemeFromSessionStorage() {
+  return window.sessionStorage.getItem('theme')
 }
-function setThemeToLocalStorage(theme) {
-  window.localStorage.setItem('theme', theme)
-  return getThemeFromLocalStorage()
+function setThemeToSessionStorage(theme) {
+  window.sessionStorage.setItem('theme', theme)
+  return getThemeFromSessionStorage()
 }
 
-function getCurrentPageFromLocalStorage() {
-  return window.localStorage.getItem('currentPage')
+function getCurrentPageFromSessionStorage() {
+  return window.sessionStorage.getItem('currentPage')
 }
-function setCurrentPageToLocalStorage(page) {
-  window.localStorage.setItem('currentPage', page)
-  return getCurrentPageFromLocalStorage()
+function setCurrentPageToSessionStorage(page) {
+  window.sessionStorage.setItem('currentPage', page)
+  return getCurrentPageFromSessionStorage()
 }
 
 function menuSelected(item) {
   console.log(item.key, 'selected')
-  setCurrentPageToLocalStorage(item.key)
+  setCurrentPageToSessionStorage(item.key)
   Cache.currentPage = item.key
 }
 </script>
