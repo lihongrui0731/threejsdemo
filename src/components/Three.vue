@@ -8,9 +8,10 @@
 import * as THREE from 'three';
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
-import {onMounted, watch} from "vue";
+import {onBeforeUnmount, onMounted, watch} from "vue";
 import assimpjs from "assimpjs/dist/assimpjs"
 import {DRACOLoader} from "three/addons/loaders/DRACOLoader.js";
+import {BufferGeometry} from "three";
 
 let threeJsView
 let scene
@@ -85,6 +86,7 @@ function loadExternal() {
     // console.log(soundSourceScene)
     // scene.add(soundSourceScene)
     scene.add(objects)
+    material.dispose()
   })
   loader.load('/Building.glb2', (gltf) => {
     let buildingScene = gltf.scene;
@@ -101,6 +103,7 @@ function loadExternal() {
     //   // buildingScene.children[i].rotation.x = 0
     // }
     scene.add(objectsGroup)
+    material.dispose()
   })
   renderer.render(scene, camera)
 }
@@ -135,13 +138,17 @@ onMounted(() => {
   camera.position.x = 40;
   camera.position.y = 40
   animate()
-  Array(200).fill().forEach(addStar)
+  // Array(200).fill().forEach(addStar)
   loadExternal()
 })
-let count = 0
+onBeforeUnmount(() => {
+  geometry.dispose()
+  material.dispose()
 
+})
+
+//////////////////////////////////////////////////////////////////////////
 function generateGroupScene(rawScene, group) {
-  count ++
   // console.log('rawScene', rawScene)
   if(rawScene.isGroup) {
     // console.log(rawScene.children.length)
