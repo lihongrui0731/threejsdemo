@@ -54,9 +54,9 @@ function loadExternal() {
   //   }
   //   object = null
   // })
-  let loader = new GLTFLoader();
+  let gltfLoader = new GLTFLoader();
   let textureLoader = new THREE.TextureLoader();
-  loader.load('/Terrain.glb2', (gltf) => {
+  gltfLoader.load('/Terrain.glb2', (gltf) => {
     let terrainScene = gltf.scene.children[0]
     for (let i=0; i<terrainScene.children.length; i++) {
       textureLoader.load('/MODEL_R.jpg', (texture)=>{
@@ -67,7 +67,7 @@ function loadExternal() {
     }
     scene.add(terrainScene)
   })
-  loader.load('/Area sourceISO 9613.glb2', (gltf)=>{
+  gltfLoader.load('/Area sourceISO 9613.glb2', (gltf)=>{
     // let soundSourceScene = gltf.scene.children[0]
     // console.log(soundSourceScene)
     let group = new THREE.Group()
@@ -88,7 +88,7 @@ function loadExternal() {
     scene.add(objects)
     material.dispose()
   })
-  loader.load('/Building.glb2', (gltf) => {
+  gltfLoader.load('/Building.glb2', (gltf) => {
     let buildingScene = gltf.scene;
     let material = new THREE.MeshBasicMaterial({color: '#F15845'})
     // console.log(buildingScene)
