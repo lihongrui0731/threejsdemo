@@ -9,9 +9,6 @@ import * as THREE from 'three';
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
 import {onBeforeUnmount, onMounted, watch} from "vue";
-import assimpjs from "assimpjs/dist/assimpjs"
-import {DRACOLoader} from "three/addons/loaders/DRACOLoader.js";
-import {BufferGeometry} from "three";
 
 let threeJsView
 let scene
@@ -107,7 +104,26 @@ function loadExternal() {
   })
   renderer.render(scene, camera)
 }
-
+function loadOBJ() {
+  let gltfLoader = new GLTFLoader()
+  gltfLoader.load('/transformer.gltf', (gltf) => {
+    let transformerScene = gltf.scene.children[0];
+    console.log('transformerScene', transformerScene)
+    let material = new THREE.MeshBasicMaterial({
+      color: '#a0a5a8',
+      // emissive: '#837c7c',
+      // roughness: 1,
+      // metalness: 0.5,
+      // fog: true,
+    })
+    for (let i=0; i<transformerScene.children.length; i++) {
+      transformerScene.children[i].material = material;
+      transformerScene.children[i].scale.set(0.1, 0.1, 0.1)
+    }
+    transformerScene.scale.set(0.1, 0.1, 0.1)
+    scene.add(transformerScene)
+  })
+}
 onMounted(() => {
   threeJsView = document.getElementById('threeJsView')
   scene = new THREE.Scene;
@@ -140,6 +156,7 @@ onMounted(() => {
   animate()
   // Array(200).fill().forEach(addStar)
   loadExternal()
+  // loadOBJ()
 })
 onBeforeUnmount(() => {
   geometry.dispose()
